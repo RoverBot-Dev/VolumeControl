@@ -30,12 +30,14 @@ app.listen(80,  () => {
         volume = parseInt(volume);
         //map the volume between 0 and 100 to the range 0 to 1 
         volume = volume / 100;
+        if (volume > 1) { volume = 1; }
+        if (volume < 0) { volume = 0; }
         //check time between last volume change and now
         var now = new Date();
         var timeDiff = now.getTime() - lastVolumeChange.getTime();
         timeDiff = timeDiff / 1000;
         //if the time difference is less than 1 second, do not change the volume
-        if (timeDiff < 1) {
+        if (timeDiff < 2) {
             res.send({ 
                 error: "Volume change too fast. " + timeDiff + " seconds since last change"
             });
