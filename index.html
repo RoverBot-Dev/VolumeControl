@@ -1,0 +1,53 @@
+
+<html> 
+<head>
+<title>Volume</title>
+<meta name="description" content="Troll Rover by changing his computer's volume!">
+</head>
+<body>
+    <h1> Control Rover's computer's volume.</h1>
+    <br>
+    <p>Control it via the slider below</p>
+<form action="/volume" method="post">
+<p id="text">  </p>
+
+<input type="range" name="volume" id="volume" min="0" max="100" value=currentvolume() required>
+<input type="submit" value="Submit">
+</form>
+
+</body>
+
+    <style>
+        body {
+            background-color: #f2f2f2;
+        }
+        form {
+            background-color: #f2f2f2;
+            border: 1px solid black;
+            padding: 20px;
+            margin: 20px;
+        }
+        input {
+            margin: 10px;
+        }
+
+    </style>
+    <script>
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+    
+    function currentvolume() {
+        var current = httpGet(window.location.href + "currentvolume");
+        console.log("current volume is " + current);
+       // set the current volume to the current volume
+        document.getElementById("volume").value = current;
+        document.getElementById("text").innerHTML = "Current volume is: "+current+"%"+ "\n This is the current volume of the computer and not the current value of the slider.";
+    }
+    currentvolume()
+    </script>
+</html>
