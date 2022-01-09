@@ -11,7 +11,7 @@
 <form action="/volume" method="post">
 <p id="text">  </p>
 
-<input type="range" name="volume" id="volume" min="0" max="100" value=currentvolume() required>
+<input type="range" name="volume" id="volume" min="0" max="100" onChange="currentvolume()" value=currentvolume() required>
 <input type="submit" value="Submit">
 </form>
 

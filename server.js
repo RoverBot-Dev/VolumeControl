@@ -26,12 +26,18 @@ app.listen(80,  () => {
     app.post('/volume', urlencodedParser, async function (req, res) {
         
         console.log(req.body);
+        if(!req.body.volume) return 
         var volume = req.body.volume;
+
         volume = parseInt(volume);
+
         //map the volume between 0 and 100 to the range 0 to 1 
+
         volume = volume / 100;
+
         if (volume > 1) { volume = 1; }
         if (volume < 0) { volume = 0; }
+
         //check time between last volume change and now
         var now = new Date();
         var timeDiff = now.getTime() - lastVolumeChange.getTime();
