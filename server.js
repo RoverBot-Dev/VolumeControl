@@ -1,9 +1,8 @@
-// Lets import the express module
-const { NodeAudioVolumeMixer } = require("node-audio-volume-mixer");
+var loudness = require("loudness")
 var lastVolumeChange = new Date(); 
 const express = require('express');
 var bodyParser = require('body-parser');
-const { nodeModuleNameResolver } = require("typescript");
+const alert = require('alert');
 //start the express app
 const app = express();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -24,18 +23,28 @@ app.listen(80,  () => {
 
     // if the server gets a POST request, log the data to the console
     app.post('/volume', urlencodedParser, async function (req, res) {
-        
+        // check if the request body length is too big
+        if (req.body.length > 100) {
+            res.status(400).send('Request body too big');
+            return;
+        }
         console.log(req.body);
-        if(!req.body.volume) return 
+        if(!req.body.volume) return
+        if(req.body.message)
+        {
+            if (timeDiff < 2) {
+                res.send({ 
+                    error: "Too fast. Wait 2 seconds between messages"
+                });
+                return
+            }
+            alert(req.body.message)
+        }
         var volume = req.body.volume;
 
         volume = parseInt(volume);
 
-        //map the volume between 0 and 100 to the range 0 to 1 
-
-        volume = volume / 100;
-
-        if (volume > 1) { volume = 1; }
+        if (volume > 100) { volume = 100; }
         if (volume < 0) { volume = 0; }
 
         //check time between last volume change and now
@@ -50,18 +59,15 @@ app.listen(80,  () => {
             return
         }
 
-        NodeAudioVolumeMixer.setMasterVolumeLevelScalar(volume);
+        loudness.setVolume(volume)
+
         lastVolumeChange = new Date(); 
         res.redirect('/');
       }) 
       
-      app.get('/currentvolume', (req, res) => {  
+      app.get('/currentvolume', async (req, res) => {  
         // send the current volume to the client
-        var volume = NodeAudioVolumeMixer.getMasterVolumeLevelScalar();
-        volume = volume * 100;
-        //remove the decimal point
-        volume = Math.round(volume);
-
+        var volume = await loudness.getVolume();
         res.send(volume.toString());
      }
      );

@@ -12,6 +12,11 @@
 <p id="text">  </p>
 
 <input type="range" name="volume" id="volume" min="0" max="100" onChange="currentvolume()" value=currentvolume() required>
+<br>
+<!--Lets add a optional textbox to attach a message -->
+<label for="message">Message to send:</label>
+<input type="text" name="message" id="message" placeholder="Optional">
+<br>
 <input type="submit" value="Submit">
 </form>
 
@@ -45,7 +50,6 @@ function httpGet(theUrl)
         var current = httpGet(window.location.href + "currentvolume");
         console.log("current volume is " + current);
        // set the current volume to the current volume
-        document.getElementById("volume").value = current;
         document.getElementById("text").innerHTML = "Current volume is: "+current+"%"+ "\n This is the current volume of the computer and not the current value of the slider.";
     }
     currentvolume()
